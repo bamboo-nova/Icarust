@@ -1,0 +1,18 @@
+x-template: &template
+  build:
+    context: .
+  platform: 'linux/x86_64'
+  env_file:
+    - .env
+  working_dir: $DOCKER_WORKDIR
+  volumes:
+    - .:${DOCKER_WORKDIR}
+  tty: true
+
+services:
+  icarust-demo:
+    <<: *template
+    image: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/icarust-dev-${PATCH_PHASE}:dev
+    command: /bin/bash
+volumes:
+  python-packages:
