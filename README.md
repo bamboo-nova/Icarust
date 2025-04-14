@@ -7,30 +7,46 @@ Object detection server with rust
 $ source ./.env
 ```
 
-## dokcerのイメージをGoogle Artifact Registry(GAR)にプッシュする
+0. 事前に必要な準備
 
-GARにプッシュする時はパイプライン実行時のみで良いので、開発中はビルドだけで良い。
+cloudrun周りのgcpへの認証など
 
 ```
-$ gcloud auth configure-docker asia-northeast1-docker.pkg.dev --quiet
+gcloud auth login
+gcloud config set project <project-id>
+
+
+gcloud auth application-default login
+gcloud services enable run.googleapis.com
+```
+
+1. dokcerのイメージをGoogle Artifact Registry(GAR)にプッシュする
+
+```
+$ gcloud auth configure-docker <region>-docker.pkg.dev --quiet
 ```
 
 ```
 # ビルド
-docker compose build (v2)
+docker compose build
 
 # GARへプッシュ
-docker compose push (v2)
+docker compose push
 ```
 
-2. dockerイメージの構築
+2. 動作確認
 
 ```
-$ DOCKER_BUILDKIT=1 docker build . -t icarust-image
+$ docker run -p 8080:8080 <IMAGE ID>
 ```
 
-3. コンテナの起動
+3. デプロイ
 
 ```
-$ docker compose run --rm icarust-demo
+terraform init
+terraform plan
+terraform apply
+
+# 消去時
+terraform destroy
 ```
