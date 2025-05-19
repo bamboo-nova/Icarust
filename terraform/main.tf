@@ -25,6 +25,7 @@ resource "google_cloud_run_service" "default" {
     }
 }
 
+
 resource "google_cloud_run_service_iam_member" "invoker" {
     location = var.region
     service  = google_cloud_run_service.default.name
